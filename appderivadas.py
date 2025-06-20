@@ -71,16 +71,16 @@ def main():
 
     with col3:
         if st.button("Siguiente ejercicio"):
-            if "✅" in (st.session_state.mensaje_verificacion or "") or st.session_state.mostrar_pasos:
+            if ("✅" in (st.session_state.mensaje_verificacion or "")) or st.session_state.mostrar_pasos:
                 if st.session_state.indice < len(ejercicios) - 1:
-                st.session_state.indice += 1
-                st.session_state.mostrar_pasos = False
-                st.session_state.mensaje_verificacion = None
+                    st.session_state.indice += 1
+                    st.session_state.mostrar_pasos = False
+                    st.session_state.mensaje_verificacion = None
+                else:
+                    st.balloons()
+                    st.success("🎉 ¡Has completado todos los ejercicios!")
             else:
-            st.balloons()
-            st.success("🎉 ¡Has completado todos los ejercicios!")
-            else:
-            st.warning("Debes responder correctamente o consultar la solución paso a paso antes de avanzar.")
+                st.warning("Debes responder correctamente o consultar la solución paso a paso antes de avanzar.")
 
     # Mostrar mensaje de verificación
     if st.session_state.mensaje_verificacion:
