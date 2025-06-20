@@ -84,8 +84,6 @@ with col3:
             st.balloons()
             st.success("🎉 ¡Has completado todos los ejercicios!")
             
-if __name__ == "__main__":
-    main()
     
 # Mostrar mensaje de verificación si existe
 if st.session_state.mensaje_verificacion:
@@ -99,3 +97,6 @@ if st.session_state.mensaje_verificacion:
 # Mostrar pasos si el usuario pidió verlos
 if st.session_state.mostrar_pasos:
     st.info(f"📘 Pasos para derivar:\n\n{ej['pasos']}")
+
+if __name__ == "__main__":
+    main()
