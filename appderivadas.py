@@ -29,50 +29,69 @@ ejercicios = [
     {
         'funcion': x * sp.sin(x),
         'respuesta': sp.diff(x * sp.sin(x), x),
-        'pasos': "Paso 1: Identifica como un producto u = x, v = sin(x)\n"
-                 "Paso 2: Aplica la regla del producto: u'v + uv'\n"
-                 "Paso 3: Derivada de x = 1, derivada de sin(x) = cos(x)\n"
-                 "Resultado: sin(x) + x*cos(x)"
+        'pasos': ("Paso 1: Identifica como un producto u = x, v = sin(x)\n"
+                  "Paso 2: Aplica la regla del producto: u'v + uv'\n"
+                  "Paso 3: Derivada de x = 1, derivada de sin(x) = cos(x)\n"
+                  "Resultado: sin(x) + x*cos(x)")
     }
 ]
 
-# Estado actual del ejercicio (usando session_state para conservarlo entre interacciones)
+# Inicializar el estado si no existe
 if 'indice' not in st.session_state:
     st.session_state.indice = 0
 if 'mostrar_pasos' not in st.session_state:
     st.session_state.mostrar_pasos = False
+if 'mensaje_verificacion' not in st.session_state:
+    st.session_state.mensaje_verificacion = None
 
-st.title("🧠 Practica Interactiva: Derivadas con Streamlit")
+st.title("🧠 Práctica Interactiva: Derivadas con Streamlit")
 
-# Mostrar el ejercicio actual
 ej = ejercicios[st.session_state.indice]
+
 st.subheader(f"📝 Ejercicio {st.session_state.indice + 1} de {len(ejercicios)}")
 st.latex(f"f(x) = {sp.latex(ej['funcion'])}")
 
 # Entrada del usuario
 respuesta_usuario = st.text_input("Escribe la derivada de f(x):")
 
-if st.button("Verificar"):
-    try:
-        derivada_usuario = sp.sympify(respuesta_usuario)
-        if sp.simplify(derivada_usuario - ej['respuesta']) == 0:
-            st.success("✅ ¡Correcto!")
+# Botones en columnas para mejor diseño
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("Verificar"):
+        try:
+            derivada_usuario = sp.sympify(respuesta_usuario)
+            if sp.simplify(derivada_usuario - ej['respuesta']) == 0:
+                st.session_state.mensaje_verificacion = ("✅ ¡Correcto!")
+            else:
+                st.session_state.mensaje_verificacion = ("❌ Incorrecto. Intenta de nuevo o haz clic en 'Ver solución paso a paso'.")
+        except Exception as e:
+            st.session_state.mensaje_verificacion = (f"⚠️ Error al interpretar tu derivada: {e}")
+
+with col2:
+    if st.button("Ver solución paso a paso"):
+        st.session_state.mostrar_pasos = True
+
+with col3:
+    if st.button("Siguiente ejercicio"):
+        if st.session_state.indice < len(ejercicios) - 1:
+            st.session_state.indice += 1
+            st.session_state.mostrar_pasos = False
+            st.session_state.mensaje_verificacion = None
+            st.experimental_rerun()
         else:
-            st.error("❌ Incorrecto. Intenta de nuevo o haz clic en 'Ver solución paso a paso'.")
-    except Exception as e:
-        st.warning(f"⚠️ Error al interpretar tu derivada: {e}")
+            st.balloons()
+            st.success("🎉 ¡Has completado todos los ejercicios!")
 
-if st.button("Ver solución paso a paso"):
-    st.session_state.mostrar_pasos = True
+# Mostrar mensaje de verificación si existe
+if st.session_state.mensaje_verificacion:
+    if "✅" in st.session_state.mensaje_verificacion:
+        st.success(st.session_state.mensaje_verificacion)
+    elif "❌" in st.session_state.mensaje_verificacion:
+        st.error(st.session_state.mensaje_verificacion)
+    else:
+        st.warning(st.session_state.mensaje_verificacion)
 
+# Mostrar pasos si el usuario pidió verlos
 if st.session_state.mostrar_pasos:
     st.info(f"📘 Pasos para derivar:\n\n{ej['pasos']}")
-
-if st.button("Siguiente ejercicio"):
-    if st.session_state.indice < len(ejercicios) - 1:
-        st.session_state.indice += 1
-        st.session_state.mostrar_pasos = False
-        st.experimental_rerun()
-    else:
-        st.balloons()
-        st.success("🎉 ¡Has completado todos los ejercicios!")
