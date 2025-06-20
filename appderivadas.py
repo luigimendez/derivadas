@@ -79,11 +79,14 @@ with col3:
             st.session_state.mostrar_pasos = False
             #st.session_state.mensaje_verificacion = None
             st.experimental_rerun()
+            return
         else:
             st.balloons()
             st.success("🎉 ¡Has completado todos los ejercicios!")
-            return
-
+            
+if __name__ == "__main__":
+    main()
+    
 # Mostrar mensaje de verificación si existe
 if st.session_state.mensaje_verificacion:
     if "✅" in st.session_state.mensaje_verificacion:
