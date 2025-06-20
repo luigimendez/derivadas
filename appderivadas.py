@@ -77,7 +77,7 @@ with col3:
         if st.session_state.indice < len(ejercicios) - 1:
             st.session_state.indice += 1
             st.session_state.mostrar_pasos = False
-            st.session_state.mensaje_verificacion = None
+            #st.session_state.mensaje_verificacion = None
             st.experimental_rerun()
         else:
             st.balloons()
