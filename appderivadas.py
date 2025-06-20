@@ -75,8 +75,6 @@ def main():
                 st.session_state.indice += 1
                 st.session_state.mostrar_pasos = False
                 st.session_state.mensaje_verificacion = None
-                st.experimental_rerun()
-                return  # <-- importantísimo para evitar seguir ejecutando
             else:
                 st.balloons()
                 st.success("🎉 ¡Has completado todos los ejercicios!")
